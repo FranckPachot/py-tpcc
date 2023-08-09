@@ -3,12 +3,18 @@ ycqlsh> create keyspace tpcc;
 
 ```
 
+bash
+
+curl -sSL https://downloads.yugabyte.com/get_clients.sh | bash
+ln -s "/py-tpcc/pytpcc/yugabyte-client-2.16.0.1/bin/ycqlsh" /usr/local/bin/ycqlsh
+ycqlsh yb 9042 -e 'create keyspace tpcc'
+
 /usr/local/bin/python -m pip install --upgrade pip
-pip install pycassa
-python tpcc.py --print-config cassandra
+pip install pycassa cqlsh
+pip install yb-cassandra-driver --install-option="--no-cython"
+cd /py-tpcc/pytpcc/
 
-
-cat > cassandra.config <<'CONFIG'
+cat > ycql.config <<'CONFIG'
 [cassandra]
 # Keyspace
 keyspace             = tpcc
@@ -23,6 +29,6 @@ name                 = tpcc
 CONFIG
 
 
-python tpcc.py --config=cassandra.config cassandra
+python tpcc.py --config=ycql.config cassandra
 
 ```
